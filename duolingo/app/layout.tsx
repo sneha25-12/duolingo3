@@ -4,7 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Nunito } from "next/font/google";
 import {Toaster} from "@/components/ui/sonner"
-
+import { ExitModal } from "@/store/exit-modal";
 const font = Nunito({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -25,6 +25,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${font.variable} font-sans antialiased`}>
           <Toaster/>
+          <ExitModal/>
           {children} 
            
         </body>

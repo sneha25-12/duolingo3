@@ -1,4 +1,6 @@
-import { Progress } from "@/components/ui/progress"; // shadcn version
+"use client";
+import { Progress } from "@/components/ui/progress"; // keep as is
+import { useExitModal } from "@/store/use-exit-modal";
 import { InfinityIcon, X } from "lucide-react";
 import Image from "next/image";
 
@@ -13,18 +15,23 @@ export const Header = ({
   percentage,
   hasActiveSubscription,
 }: Props) => {
+  const { open } = useExitModal();
+
   return (
     <header className="lg:pt-[50px] pt-[20px] px-10 flex gap-x-7 items-center justify-between max-w-[1140px] mx-auto w-full">
       <X
-        onClick={() => {}}
+        onClick={open} // ✅ fixed here
         className="text-slate-500 hover:opacity-75 transition cursor-pointer"
       />
 
       <div className="flex-1 px-4">
-        <Progress
-          value={percentage}
-          className="h-2 bg-muted"
-        />
+        {/* 🛠️ Wrap in container to force height + bg override */}
+        <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
+          <Progress
+            value={percentage}
+            className="h-2 bg-transparent"
+          />
+        </div>
       </div>
 
       <div className="text-rose-500 flex items-center font-bold">
