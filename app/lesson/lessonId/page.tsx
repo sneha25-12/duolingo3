@@ -1,14 +1,25 @@
+// app/lesson/[lessonId]/page.tsx
+
 import { getLesson, getUserProgress } from "@/db/queries";
 import { redirect } from "next/navigation";
-import { Quiz } from "./quiz";
+import { Quiz } from "@/app/lesson/quiz";
 
-const LessonPage = async () => {
-  const lessonData = getLesson();
-  const userProgressData = getUserProgress();
+type Props = {
+  params: {
+    lessonId: string;
+  };
+};
+
+const LessonIdPage = async ({ params }: Props) => {
+  const lessonId = Number(params.lessonId);
+
+  if (isNaN(lessonId)) {
+    redirect("/learn");
+  }
 
   const [lesson, userProgress] = await Promise.all([
-    lessonData,
-    userProgressData,
+    getLesson(lessonId),
+    getUserProgress(),
   ]);
 
   if (!lesson || !userProgress) {
@@ -16,7 +27,7 @@ const LessonPage = async () => {
   }
 
   const initialPercentage =
-    (lesson.challenges.filter((challenge) => challenge.completed).length /
+    (lesson.challenges.filter((c) => c.completed).length /
       lesson.challenges.length) *
     100;
 
@@ -31,4 +42,4 @@ const LessonPage = async () => {
   );
 };
 
-export default LessonPage;
+export default LessonIdPage;
